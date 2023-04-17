@@ -1,7 +1,7 @@
 {
   "name": "optel",
   "version": "0.0.0",
-  "description": "WIP",
+  "description": "TypeScript library for type-safe assigning and merging objects",
   "main": "./dist/index.js",
   "exports": "./src/index.js",
   "type": "module",
@@ -9,8 +9,11 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
+  "author": "TetroGem",
   "license": "ISC",
+  "repository": {
+    "url": "https://github.com/TetroGem/optel"
+  },
   "dependencies": {
     "hotscript": "^1.0.11",
     "typescript": "^5.0.4"
