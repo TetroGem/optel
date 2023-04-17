@@ -10,9 +10,12 @@ function assign<T extends object, S extends readonly AssignableTo<T>[]>(
 }
 
 function merge<const S extends readonly object[]>(
-    ...sources: S
+    ...sources: AssertAssignableTo<{}, S>
 ): AssignAll<{}, S> {
     return Object.assign({}, ...sources);
 }
 
 export default { assign, merge };
+
+
+

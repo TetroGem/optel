@@ -15,7 +15,9 @@
     "url": "https://github.com/TetroGem/optel"
   },
   "dependencies": {
-    "hotscript": "^1.0.11",
+    "hotscript": "^1.0.11"
+  },
+  "devDependencies": {
     "typescript": "^5.0.4"
   }
 }

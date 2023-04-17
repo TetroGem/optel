@@ -31,13 +31,21 @@ export type Assign<T, S> = Prettify<
   & { [P in UnoptionalKey<T, S>]: T[P] | Required<S>[P] }
 >;
 
-export type AssertAssignableTo<T, S> =
-    S extends Partial<Record<infer U, any>>[]
-        ? (
-            [Extract<U, ReadonlyKey<T>>] extends [never]
-                ? S
-                : "Sources cannot overwrite readonly properties of target"[]
-        ) : "Source types are not assignable to target type"[];
+export type AssertAssignableTo<T, S extends readonly any[]> =
+    Interface<S[number]> extends S[number]
+        ? S extends Partial<infer U>[]
+            ? (
+                [Extract<keyof U, ReadonlyKey<T>>] extends [never]
+                    ? Interface<T> extends T
+                        ? S
+                        : [Exclude<keyof U, keyof Interface<T>>] extends [never]
+                            ? S
+                            : "Sources can only contain public properties of a target with private properties"[]
+                    : "Sources cannot overwrite readonly properties of target"[]
+            ) : S
+        : "Sources cannot have private properties"[]
+        ;
+
 
 export type AssignableTo<T> = Partial<T> & object;
 export type AssignAll<T, S extends readonly AssignableTo<T>[]> = Pipe<T, [Tuples.Reduce<HOTAssign, _, S>]>;
