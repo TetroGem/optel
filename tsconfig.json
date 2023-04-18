@@ -23,5 +23,6 @@
         "strictPropertyInitialization": true,
         "outDir": "./dist",
         "declaration": true,
+        "allowSyntheticDefaultImports": true,
     },
 }

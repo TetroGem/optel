@@ -1,5 +1,5 @@
-import { Pipe, Tuples, _ } from "hotscript";
-import { HOTAssign } from "./hots";
+import { B, Objects, Pipe, Tuples, _ } from "hotscript";
+import { HOTAssign, HOTUnionToTuple } from "./hots";
 
 export type Interface<T> = {[K in keyof T]: T[K]};
 export type Prettify<T> =
@@ -49,3 +49,14 @@ export type AssertAssignableTo<T, S extends readonly any[]> =
 
 export type AssignableTo<T> = Partial<T> & object;
 export type AssignAll<T, S extends readonly AssignableTo<T>[]> = Pipe<T, [Tuples.Reduce<HOTAssign, _, S>]>;
+
+export type KeyOf<T, V> = keyof Pipe<
+    T,
+    [
+        Objects.Entries,
+        HOTUnionToTuple,
+        Tuples.Filter<B.Extends<[any, V], _>>,
+        Tuples.ToUnion,
+        Objects.FromEntries,
+    ]
+>;
