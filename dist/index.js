@@ -1,4 +1,3 @@
-// import { TypeGuards } from "./TypeGuards";
 function assign(target, ...sources) {
     return Object.assign(target, ...sources);
 }
