@@ -1,6 +1,6 @@
 {
   "name": "optel",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "TypeScript library for type-safe assigning and merging objects",
   "main": "./dist/index.js",
   "exports": "./src/index.js",
@@ -14,7 +14,18 @@
   "repository": {
     "url": "https://github.com/TetroGem/optel"
   },
-  "keywords": ["objects", "typescript", "typesafe", "assign", "infer", "assert", "merge", "object", "inference", "type"],
+  "keywords": [
+    "objects",
+    "typescript",
+    "typesafe",
+    "assign",
+    "infer",
+    "assert",
+    "merge",
+    "object",
+    "inference",
+    "type"
+  ],
   "dependencies": {
     "hotscript": "^1.0.11"
   },
