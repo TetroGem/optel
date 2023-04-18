@@ -1,4 +1,4 @@
-import { AssertAssignableTo, AssignAll, AssignableTo, KeyOf, OptelPick } from './types';
+import { AssertAssignableTo, AssignAll, AssignableTo, KeyOf, OptelOmit, OptelPick } from './types';
 
 export function assign<T extends object, S extends readonly AssignableTo<T>[]>(
     target: T,
@@ -18,19 +18,23 @@ export function pick<T extends object, const K extends readonly (keyof T & strin
     ...keys: K
 ): OptelPick<T, K> {
     type Key = K[number];
-    const res: Partial<Pick<T, Key>> = {};
+    const res: Partial<OptelPick<T, K>> = {};
     for(const key of keys) {
         res[key as Extract<keyof T, Key>] = object[key as keyof T] as any;
     }
-    return res as OptelPick<T, K>
+    return res as OptelPick<T, K>;
 }
 
-export function omit<T extends object, const K extends keyof T & string>(object: T, ...keys: readonly K[]): Omit<T, K> {
-    const res: Partial<Omit<T, K>> = {};
+export function omit<T extends object, const K extends readonly (keyof T & string)[]>(
+    object: T,
+    ...keys: K
+): OptelOmit<T, K> {
+    type Key = K[number];
+    const res: Partial<OptelOmit<T, K>> = {};
     for(const key of Object.keys(object)) {
-        if(keys.indexOf(key as K) === -1) res[key as Exclude<keyof T, K>] = object[key as keyof T] as any;
+        if(keys.indexOf(key as Key) === -1) res[key as Exclude<keyof T, Key>] = object[key as keyof T] as any;
     }
-    return res as Omit<T, K>
+    return res as OptelOmit<T, K>;
 }
 
 export function keyOf<T extends object, const V>(
