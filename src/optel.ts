@@ -1,4 +1,4 @@
-import { AssertAssignableTo, AssignAll, AssignableTo, KeyOf } from './types';
+import { AssertAssignableTo, AssignAll, AssignableTo, KeyOf, OptelPick } from './types';
 
 export function assign<T extends object, S extends readonly AssignableTo<T>[]>(
     target: T,
@@ -13,12 +13,16 @@ export function merge<const S extends readonly object[]>(
     return Object.assign({}, ...sources);
 }
 
-export function pick<T extends object, const K extends keyof T & string>(object: T, ...keys: readonly K[]): Pick<T, K> {
-    const res: Partial<Pick<T, K>> = {};
+export function pick<T extends object, const K extends readonly (keyof T & string)[]>(
+    object: T,
+    ...keys: K
+): OptelPick<T, K> {
+    type Key = K[number];
+    const res: Partial<Pick<T, Key>> = {};
     for(const key of keys) {
-        res[key as Extract<keyof T, K>] = object[key as keyof T] as any;
+        res[key as Extract<keyof T, Key>] = object[key as keyof T] as any;
     }
-    return res as Pick<T, K>
+    return res as OptelPick<T, K>
 }
 
 export function omit<T extends object, const K extends keyof T & string>(object: T, ...keys: readonly K[]): Omit<T, K> {

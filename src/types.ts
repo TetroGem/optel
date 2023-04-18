@@ -1,5 +1,6 @@
 import { B, Objects, Pipe, Tuples, _ } from "hotscript";
-import { HOTAssign, HOTUnionToTuple } from "./hots";
+import { HOTAssign, HOTEntriesFromKeys, HOTFilterNotUnion, HOTUnionToTuple } from "./hots";
+import { UnionToTuple } from "hotscript/dist/internals/helpers";
 
 export type Interface<T> = {[K in keyof T]: T[K]};
 export type Prettify<T> =
@@ -58,5 +59,28 @@ export type KeyOf<T, V> = keyof Pipe<
         Tuples.Filter<B.Extends<[any, V], _>>,
         Tuples.ToUnion,
         Objects.FromEntries,
+    ]
+>;
+
+export type IsUnion<T> = UnionToTuple<T> extends [any] ? false : true;
+
+export type OptelPick<O, K extends readonly (keyof O)[]> = Pipe<
+    K,
+    [
+        Objects.Mutable<K>,
+        Tuples.Filter<HOTFilterNotUnion>,
+        Tuples.Map<HOTEntriesFromKeys<O>>,
+        Tuples.ToUnion,
+        Objects.FromEntries,
+    ]
+> & Pipe<
+    K,
+    [
+        Objects.Mutable<K>,
+        Tuples.Filter<B.Not<HOTFilterNotUnion>>,
+        Tuples.Map<HOTEntriesFromKeys<O>>,
+        Tuples.ToUnion,
+        Objects.FromEntries,
+        Objects.Partial,
     ]
 >;
