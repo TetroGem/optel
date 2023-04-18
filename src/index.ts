@@ -1,5 +1,3 @@
-// import { TypeGuards } from "./TypeGuards";
-
 import { AssignAll, AssertAssignableTo, AssignableTo } from './types';
 
 function assign<T extends object, S extends readonly AssignableTo<T>[]>(
@@ -16,6 +14,3 @@ function merge<const S extends readonly object[]>(
 }
 
 export default { assign, merge };
-
-
-
