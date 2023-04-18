@@ -14,6 +14,7 @@
   "repository": {
     "url": "https://github.com/TetroGem/optel"
   },
+  "keywords": ["objects", "typescript", "typesafe", "assign", "infer", "assert", "merge", "object", "inference", "type"],
   "dependencies": {
     "hotscript": "^1.0.11"
   },
