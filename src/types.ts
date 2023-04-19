@@ -69,6 +69,8 @@ export type OptelPick<O, K extends readonly (keyof O)[]> = Pipe<
     [
         Objects.Mutable<K>,
         Tuples.Filter<HOTIsNotUnion>,
+        Tuples.ToUnion,
+        HOTUnionToTuple,
         Tuples.Map<HOTEntriesFromKeys<O>>,
         Tuples.ToUnion,
         Objects.FromEntries,
@@ -78,6 +80,8 @@ export type OptelPick<O, K extends readonly (keyof O)[]> = Pipe<
     [
         Objects.Mutable<K>,
         Tuples.Filter<HOTIsUnion>,
+        Tuples.ToUnion,
+        HOTUnionToTuple,
         Tuples.Map<HOTEntriesFromKeys<O>>,
         Tuples.ToUnion,
         Objects.FromEntries,
@@ -85,11 +89,20 @@ export type OptelPick<O, K extends readonly (keyof O)[]> = Pipe<
     ]
 >;
 
-export type OptelOmit<O, K extends readonly (keyof O)[]> = Omit<O, K[number]> & Pipe<
+type DefinitelyOmittedKey<K extends readonly any[]> = Pipe<
     K,
     [
         Objects.Mutable<K>,
-        Tuples.Filter<HOTIsUnion>,
+        Tuples.Filter<HOTIsNotUnion>,
+        Tuples.ToUnion,
+    ]
+>;
+
+
+export type OptelOmit<O, K extends readonly (keyof O)[]> = Omit<O, K[number]> & Pipe<
+    Exclude<K[number], DefinitelyOmittedKey<K>>,
+    [
+        HOTUnionToTuple,
         Tuples.Map<HOTEntriesFromKeys<O>>,
         Tuples.ToUnion,
         Objects.FromEntries,

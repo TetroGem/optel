@@ -49,23 +49,32 @@ export type IsUnion<T> = UnionToTuple<T> extends [any] ? false : true;
 export type OptelPick<O, K extends readonly (keyof O)[]> = Pipe<K, [
     Objects.Mutable<K>,
     Tuples.Filter<HOTIsNotUnion>,
+    Tuples.ToUnion,
+    HOTUnionToTuple,
     Tuples.Map<HOTEntriesFromKeys<O>>,
     Tuples.ToUnion,
     Objects.FromEntries
 ]> & Pipe<K, [
     Objects.Mutable<K>,
     Tuples.Filter<HOTIsUnion>,
+    Tuples.ToUnion,
+    HOTUnionToTuple,
     Tuples.Map<HOTEntriesFromKeys<O>>,
     Tuples.ToUnion,
     Objects.FromEntries,
     Objects.Partial
 ]>;
-export type OptelOmit<O, K extends readonly (keyof O)[]> = Omit<O, K[number]> & Pipe<K, [
+type DefinitelyOmittedKey<K extends readonly any[]> = Pipe<K, [
     Objects.Mutable<K>,
-    Tuples.Filter<HOTIsUnion>,
+    Tuples.Filter<HOTIsNotUnion>,
+    Tuples.ToUnion
+]>;
+export type OptelOmit<O, K extends readonly (keyof O)[]> = Omit<O, K[number]> & Pipe<Exclude<K[number], DefinitelyOmittedKey<K>>, [
+    HOTUnionToTuple,
     Tuples.Map<HOTEntriesFromKeys<O>>,
     Tuples.ToUnion,
     Objects.FromEntries,
     Objects.Partial
 ]>;
 export type Not<T> = T extends true ? false : true;
+export {};

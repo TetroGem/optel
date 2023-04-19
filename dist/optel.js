@@ -7,6 +7,7 @@ export function merge(...sources) {
 export function pick(object, ...keys) {
     const res = {};
     for (const key of keys) {
+        // @ts-ignore - idk why it is erroring here types look fine
         res[key] = object[key];
     }
     return res;

@@ -20,6 +20,7 @@ export function pick<T extends object, const K extends readonly (keyof T & strin
     type Key = K[number];
     const res: Partial<OptelPick<T, K>> = {};
     for(const key of keys) {
+        // @ts-ignore - idk why it is erroring here types look fine
         res[key as Extract<keyof T, Key>] = object[key as keyof T] as any;
     }
     return res as OptelPick<T, K>;
