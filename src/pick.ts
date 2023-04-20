@@ -39,62 +39,8 @@ type PickRequiredKeys<O, K extends readonly string[]> = Pipe<
 
 type PickKeys<O, K extends readonly string[]> = PickPartialKeys<O, K> & PickRequiredKeys<O, K>;
 
-interface HOTDoesNotExtend<T> extends Fn {
-    return: this['arg0'] extends T ? false : true;
-}
-
-// const stringExcludeSymbol = Symbol();
-// // type StringExcludeSymbol = typeof stringExcludeSymbol;
-// export type OptelStringExclude<N extends string> = string & { [stringExcludeSymbol]: N };
-
 const unknownKeySymbol = Symbol();
-// type StringExcludeSymbol = typeof stringExcludeSymbol;
 export type OptelUnknownKeyFor<V> = string & { [unknownKeySymbol]: V };
-
-// type PickAllKeysExcept<O, K extends readonly string[]> = OptelOmit<O, AssertTuple<Readonly<Tuplify<K[number]>>>>;
-
-// type PickKeysFromStringOrStringExclude<O, K extends readonly (string | OptelStringExclude<string>)[]> =
-//     PickKeys<O, IncludedKeys<K>> &
-//     ([ExcludedKeys<K>] extends [readonly []] ? {} : PickAllKeysExcept<O, ExcludedKeys<K>>);
-
-// interface HOTUnwrapStringExclude extends Fn {
-//     return: this['arg0'] extends OptelStringExclude<infer U> ? U : never;
-// }
-
-interface HOTUnwrapUnknownKeyFor extends Fn {
-    return: this['arg0'] extends OptelUnknownKeyFor<infer U> ? U : never;
-}
-
-// type ExcludedKeys<K extends readonly (string | OptelStringExclude<string>)[]> =
-//     AssertTuple<
-//         Pipe<
-//             K,
-//             [
-//                 Objects.Mutable,
-//                 Tuples.Filter<Booleans.Extends<OptelStringExclude<string>>>,
-//                 Tuples.Map<HOTUnwrapStringExclude>,
-//                 Objects.Readonly,
-//             ]
-//         >
-//     >;
-
-// type IncludedKeys<K extends readonly (string | OptelStringExclude<string>)[]> =
-//     AssertTuple<
-//         Pipe<
-//             K,
-//             [
-//                 Objects.Mutable,
-//                 Tuples.Filter<HOTDoesNotExtend<OptelStringExclude<string>>>,
-//                 Objects.Readonly,
-//             ]
-//         >
-//     >;
-
-// type KE = [OptelStringExclude<'bar' | 'qux'>, 'foo', 'foo' | 'bar', OptelStringExclude<'bar'>];
-// type EKK = ExcludedKeys<KE>;
-// //    ^?
-// type IKK = IncludedKeys<KE>
-//    ^?
 
 export type OptelPick<O, K extends readonly (string | OptelUnknownKeyFor<any>)[]> =
     Prettify<

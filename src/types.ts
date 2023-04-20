@@ -100,3 +100,21 @@ type Push<T extends any[], V> = [...T, V];
 export type Tuplify<T, L = LastOf<T>, N = [T] extends [never] ? true : false> =
   true extends N ? [] : Push<Tuplify<Exclude<T, L>>, L>
 // </credit>
+
+interface HOTEntryValueIsDefined extends Fn {
+    return: IfEquals<this['arg0'][1], undefined, false, true>;
+}
+
+export type DefinedValuesOnly<O extends object> =
+Prettify<
+    Pipe<
+        O,
+        [
+            Objects.Entries,
+            HOTUnionToTuple,
+            Tuples.Filter<HOTEntryValueIsDefined>,
+            Tuples.ToUnion,
+            Objects.FromEntries,
+        ]
+    >
+>;

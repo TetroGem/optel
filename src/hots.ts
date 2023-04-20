@@ -29,3 +29,7 @@ export interface HOTEntriesFromKeys<O> extends Fn {
 export interface HOTNeverEntriesFromKeys extends Fn {
     return: [this['arg0'], never]
 }
+
+export interface HOTDoesNotExtend<T> extends Fn {
+    return: this['arg0'] extends T ? false : true;
+}

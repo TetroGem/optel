@@ -1,17 +1,26 @@
-import { OptelPick, OptelStringExclude, OptelUnknownKeyFor, OptelUnknownKeyOr } from './pick';
-import { AssertAssignableTo, DefinedAssignAll, AssignableTo, KeyOf, OptelOmit, AssignAll, Prettify, AssertString } from './types';
+import { OptelOmit } from './omit';
+import { OptelPick } from './pick';
+import { AssertAssignableTo, AssignAll, AssignableTo, DefinedAssignAll, DefinedValuesOnly, KeyOf } from './types';
+
+export function entries<const O extends object>(object: O): [string, unknown][] {
+    return Object.entries(object);
+}
+
+function removeUndefinedValues<O extends object>(object: O): DefinedValuesOnly<O> {
+    return Object.fromEntries(entries(object).filter(([_, value]) => value !== undefined)) as any;
+}
 
 export function assignDefined<T extends object, S extends readonly AssignableTo<T>[]>(
     target: T,
     ...sources: AssertAssignableTo<T, S>
 ): asserts target is DefinedAssignAll<T, S> {
-    return Object.assign(target, ...sources); // FIXME
+    return Object.assign(target, ...sources.map(source => removeUndefinedValues(source as object)));
 }
 
 export function mergeDefined<const S extends readonly object[]>(
     ...sources: AssertAssignableTo<{}, S>
 ): DefinedAssignAll<{}, S> {
-    return Object.assign({}, ...sources); // FIXME
+    return Object.assign({}, ...sources.map(source => removeUndefinedValues(source as object)));
 }
 
 export function assign<T extends object, S extends readonly AssignableTo<T>[]>(
@@ -42,7 +51,7 @@ export function strictPick<T extends object, const K extends readonly (keyof T &
 
 export function pick<
     T extends object,
-    const K extends readonly (string | OptelStringExclude<string>)[],
+    const K extends readonly string[],
 >(
     object: T,
     ...keys: K
@@ -73,7 +82,7 @@ export function omit<T extends object, const K extends readonly (keyof T & strin
 export function keyOf<T extends object, const V>(
     object: T,
     value: V,
-): OptelUnknownKeyFor<V> | ([KeyOf<T, V>] extends [never] ? undefined : KeyOf<T, V>) {
+): string | ([KeyOf<T, V>] extends [never] ? undefined : KeyOf<T, V>) {
     for(const [key, keyValue] of Object.entries(object)) {
         if(value === keyValue) return key as any;
     }
@@ -83,30 +92,18 @@ export function keyOf<T extends object, const V>(
 export function allKeysOf<T extends object, const V>(
     object: T,
     value: V,
-): string[] {
+): string[] | ([KeyOf<T, V>] extends [never] ? undefined : KeyOf<T, V>) {
     const allKeys: string[] = [];
     for(const [key, keyValue] of Object.entries(object)) {
         if(value === keyValue) allKeys.push(key);
     }
-    return allKeys;
+    return allKeys as any;
 }
 
-const a = {
-    foo: 1,
-    bar: 2,
-    qux: 'hello',
-    baz: false,
-};
+// export function isKey<const K extends string>(key: string, ...options: K[]): key is K {
+//     return options.includes(key as K);
+// }
 
-const numberKey = keyOf(a, 3 as number);
-const threeKey = keyOf(a, 3);
-if(numberKey !== undefined) {
-    const spicked = strictPick(a, numberKey);
-    spicked.bar;
-    const picked = pick(a, numberKey);
-    picked.foo;
-    picked[numberKey] = 4;
-    const b = picked[threeKey];
-    picked['hi'];
-    const c = picked['hi']
+export function unlock<const O>(object: O): O & { [P: PropertyKey]: unknown } {
+    return object as any;
 }
