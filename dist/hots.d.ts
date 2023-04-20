@@ -1,6 +1,9 @@
 import { Fn } from "hotscript";
 import { Not, UnionToTuple } from "hotscript/dist/internals/helpers";
-import { Assign, IsUnion } from "./types";
+import { Assign, DefinedAssign, IsUnion } from "./types";
+export interface HOTDefinedAssign extends Fn {
+    return: DefinedAssign<this['arg0'], this['arg1']>;
+}
 export interface HOTAssign extends Fn {
     return: Assign<this['arg0'], this['arg1']>;
 }
@@ -18,4 +21,7 @@ export interface HOTEntriesFromKeys<O> extends Fn {
 }
 export interface HOTNeverEntriesFromKeys extends Fn {
     return: [this['arg0'], never];
+}
+export interface HOTDoesNotExtend<T> extends Fn {
+    return: this['arg0'] extends T ? false : true;
 }
