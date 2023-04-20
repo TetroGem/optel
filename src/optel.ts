@@ -1,5 +1,5 @@
 import { OptelOmit } from './omit';
-import { OptelPick } from './pick';
+import { OptelPick, OptelUnknownKey } from './pick';
 import { AssertAssignableTo, AssignAll, AssignableTo, DefinedAssignAll, DefinedValuesOnly, KeyOf } from './types';
 
 export function entries<const O extends object>(object: O): [string, unknown][] {
@@ -40,13 +40,7 @@ export function strictPick<T extends object, const K extends readonly (keyof T &
     object: T,
     ...keys: K
 ): OptelPick<T, K> {
-    type Key = K[number];
-    const res: Partial<OptelPick<T, K>> = {};
-    for(const key of keys) {
-        // @ts-ignore - idk why it is erroring here types look fine
-        res[key as Extract<keyof T, Key>] = object[key as keyof T] as any;
-    }
-    return res as OptelPick<T, K>;
+    return pick<T, K>(object, ...keys);
 }
 
 export function pick<
@@ -65,14 +59,21 @@ export function pick<
     return res as any;
 }
 
-export function omit<T extends object, const K extends readonly (keyof T & string)[]>(
+export function strictOmit<T extends object, const K extends readonly string[]>(
+    object: T,
+    ...keys: K
+): OptelOmit<T, K> {
+    return omit<T, K>(object, ...keys);
+}
+
+export function omit<T extends object, const K extends readonly string[]>(
     object: T,
     ...keys: K
 ): OptelOmit<T, K> {
     type Key = K[number];
     const res: Partial<OptelOmit<T, K>> = {};
     for(const key of Object.keys(object)) {
-        if(keys.indexOf(key as Key) === -1) res[key as Exclude<keyof T, Key>] = object[key as keyof T] as any;
+        if(keys.indexOf(key as Key) === -1) res[key as keyof OptelOmit<T, K>] = object[key as keyof T] as any;
     }
     return res as OptelOmit<T, K>;
 }
@@ -82,7 +83,7 @@ export function omit<T extends object, const K extends readonly (keyof T & strin
 export function keyOf<T extends object, const V>(
     object: T,
     value: V,
-): string | ([KeyOf<T, V>] extends [never] ? undefined : KeyOf<T, V>) {
+): KeyOf<T, V> | OptelUnknownKey | ([KeyOf<T, V>] extends [never] ? undefined : KeyOf<T, V>) {
     for(const [key, keyValue] of Object.entries(object)) {
         if(value === keyValue) return key as any;
     }
@@ -92,7 +93,7 @@ export function keyOf<T extends object, const V>(
 export function allKeysOf<T extends object, const V>(
     object: T,
     value: V,
-): string[] | ([KeyOf<T, V>] extends [never] ? undefined : KeyOf<T, V>) {
+): (OptelUnknownKey | ([KeyOf<T, V>] extends [never] ? never : KeyOf<T, V>))[] {
     const allKeys: string[] = [];
     for(const [key, keyValue] of Object.entries(object)) {
         if(value === keyValue) allKeys.push(key);

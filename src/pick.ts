@@ -40,9 +40,9 @@ type PickRequiredKeys<O, K extends readonly string[]> = Pipe<
 type PickKeys<O, K extends readonly string[]> = PickPartialKeys<O, K> & PickRequiredKeys<O, K>;
 
 const unknownKeySymbol = Symbol();
-export type OptelUnknownKeyFor<V> = string & { [unknownKeySymbol]: V };
+export type OptelUnknownKey = string & { [unknownKeySymbol]: true };
 
-export type OptelPick<O, K extends readonly (string | OptelUnknownKeyFor<any>)[]> =
+export type OptelPick<O, K extends readonly (string | OptelUnknownKey)[]> =
     Prettify<
         PickKeys<O, K>
     >;
