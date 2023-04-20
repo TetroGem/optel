@@ -1,6 +1,10 @@
 import { Fn } from "hotscript";
 import { Not, UnionToTuple } from "hotscript/dist/internals/helpers";
-import { Assign, IsUnion } from "./types";
+import { Assign, DefinedAssign, IsUnion } from "./types";
+
+export interface HOTDefinedAssign extends Fn {
+    return: DefinedAssign<this['arg0'], this['arg1']>;
+}
 
 export interface HOTAssign extends Fn {
     return: Assign<this['arg0'], this['arg1']>;

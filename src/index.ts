@@ -1,2 +1,3 @@
 export * as optel from './optel';
-export { OptelPick, OptelOmit } from './types';
+export { OptelOmit } from './omit';
+export { OptelPick } from './pick';
