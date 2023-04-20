@@ -1,6 +1,7 @@
+import { OptelFromEntries } from './fromEntries';
 import { OptelOmit } from './omit';
 import { OptelPick, OptelUnknownKey } from './pick';
-import { AssertAssignableTo, AssignAll, AssignableTo, DefinedAssignAll, DefinedValuesOnly, KeyOf } from './types';
+import { AssertAssignableTo, AssignAll, AssignableTo, DefinedAssignAll, DefinedValuesOnly, KeyOf, Prettify } from './types';
 
 export function entries<const O extends object>(object: O): [string, unknown][] {
     return Object.entries(object);
@@ -108,3 +109,15 @@ export function allKeysOf<T extends object, const V>(
 export function unlock<const O>(object: O): O & { [P: PropertyKey]: unknown } {
     return object as any;
 }
+
+export function fromEntries<const T extends readonly (readonly [any, any])[]>(...entries: T): OptelFromEntries<T> {
+    return Object.fromEntries(entries);
+}
+
+const obj = {
+    foo: 1,
+    bar: "hi",
+};
+
+const ents = entries(obj);
+const recon = fromEntries([0, 1], [1, 2]);
