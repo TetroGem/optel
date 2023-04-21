@@ -113,11 +113,3 @@ export function unlock<const O>(object: O): O & { [P: PropertyKey]: unknown } {
 export function fromEntries<const T extends readonly (readonly [any, any])[]>(...entries: T): OptelFromEntries<T> {
     return Object.fromEntries(entries);
 }
-
-const obj = {
-    foo: 1,
-    bar: "hi",
-};
-
-const ents = entries(obj);
-const recon = fromEntries([0, 1], [1, 2]);

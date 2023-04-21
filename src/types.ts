@@ -33,7 +33,7 @@ export type DefinedAssign<T, S> = Prettify<
   & { [P in Exclude<OptionalKey<T>, MutualOptionalKey<T, S> | keyof S>]?: T[P] } // Keys that are optional and only in T
   & { [P in UnoptionalKey<T, S>]: T[P] | Required<S>[P] } // Keys that are required in T but optional in S, will form a union of their types
 >;
-export type DefinedAssignAll<T, S extends readonly AssignableTo<T>[]> = Pipe<T, [Tuples.Reduce<HOTDefinedAssign, _, S>]>;
+export type DefinedAssignAll<T, S extends readonly AssignableTo<T>[]> = Pipe<S, [Tuples.Reduce<HOTDefinedAssign, T>]>;
 
 // Any key that can be set to undefined/is optional will always stay optional (as it can be a defined key set to undefined)
 export type Assign<T, S> = Prettify<
@@ -45,20 +45,19 @@ export type Assign<T, S> = Prettify<
     & { [P in Exclude<OptionalKey<T>, MutualOptionalKey<T, S> | keyof S>]?: T[P] } // Keys that are optional and only in T
     & { [P in UnoptionalKey<T, S>]?: T[P] | Required<S>[P] } // Keys that are required in T but optional in S, will form a union of their types
 >;
-export type AssignAll<T, S extends readonly AssignableTo<T>[]> = Pipe<T, [Tuples.Reduce<HOTAssign, _, S>]>;
+export type AssignAll<T, S extends readonly AssignableTo<T>[]> = Pipe<S, [Tuples.Reduce<HOTAssign, T>]>;
 
 export type AssertAssignableTo<T, S extends readonly any[]> =
     Interface<S[number]> extends S[number]
-        ? S extends Partial<infer U>[]
-            ? (
-                [Extract<keyof U, ReadonlyKey<T>>] extends [never]
-                    ? Interface<T> extends T
+        ? [Extract<keyof S[number], ReadonlyKey<T>>] extends [never]
+            ? S[number] extends Pick<T, keyof T & keyof S[number]>
+                ? Interface<T> extends T
+                    ? S
+                    : [Exclude<keyof S[number], keyof Interface<T>>] extends [never]
                         ? S
-                        : [Exclude<keyof U, keyof Interface<T>>] extends [never]
-                            ? S
-                            : "Sources can only contain public properties of a target with private properties"[]
-                    : "Sources cannot overwrite readonly properties of target"[]
-            ) : S
+                        : "Sources can only contain public properties of a target with private properties"[]
+                : "Values of sources do not extends values of target"[]
+            : "Sources cannot overwrite readonly properties of target"[]
         : "Sources cannot have private properties"[]
         ;
 
