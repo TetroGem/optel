@@ -1,7 +1,7 @@
 import { OptelFromEntries } from './fromEntries';
 import { OptelOmit } from './omit';
 import { OptelPick, OptelUnknownKey } from './pick';
-import { AssertAssignableTo, AssignAll, AssignableTo, DefinedAssignAll, DefinedValuesOnly, KeyOf, Prettify } from './types';
+import { AssertAssignableTo, AssignAll, AssignableTo, DefinedAssignAll, DefinedValuesOnly, KeyOf } from './types';
 
 export function entries<const O extends object>(object: O): [string, unknown][] {
     return Object.entries(object);

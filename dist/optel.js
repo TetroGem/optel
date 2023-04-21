@@ -64,10 +64,4 @@ export function unlock(object) {
 export function fromEntries(...entries) {
     return Object.fromEntries(entries);
 }
-const obj = {
-    foo: 1,
-    bar: "hi",
-};
-const ents = entries(obj);
-const recon = fromEntries([0, 1], [1, 2]);
 //# sourceMappingURL=optel.js.map

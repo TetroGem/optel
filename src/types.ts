@@ -1,5 +1,5 @@
 import { B, Fn, Objects, Pipe, Tuples, _ } from "hotscript";
-import { HOTAssign, HOTDefinedAssign, HOTEntriesFromKeys, HOTIsNotUnion, HOTIsUnion, HOTUnionToTuple } from "./hots";
+import { HOTAssign, HOTDefinedAssign, HOTUnionToTuple } from "./hots";
 import { UnionToTuple } from "hotscript/dist/internals/helpers";
 
 export type Interface<T> = {[K in keyof T]: T[K]};

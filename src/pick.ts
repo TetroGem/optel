@@ -1,4 +1,4 @@
-import { Pipe, Objects, Tuples, Fn, Strings, Booleans } from "hotscript";
+import { Pipe, Objects, Tuples, Fn } from "hotscript";
 import { HOTIsUnion, HOTUnionToTuple, HOTEntriesFromKeys, HOTIsNotUnion } from "./hots";
 import { Prettify } from "./types";
 
