@@ -51,6 +51,7 @@ export type Assign<T, S> = Prettify<{
 }>;
 export type AssignAll<T, S extends readonly AssignableTo<T>[]> = Pipe<S, [Tuples.Reduce<HOTAssign, T>]>;
 export type AssertAssignableTo<T, S extends readonly any[]> = Interface<S[number]> extends S[number] ? [Extract<keyof S[number], ReadonlyKey<T>>] extends [never] ? S[number] extends Pick<T, keyof T & keyof S[number]> ? Interface<T> extends T ? S : [Exclude<keyof S[number], keyof Interface<T>>] extends [never] ? S : "Sources can only contain public properties of a target with private properties"[] : "Values of sources do not extends values of target"[] : "Sources cannot overwrite readonly properties of target"[] : "Sources cannot have private properties"[];
+export type AssertDefinedAssignableTo<T, S extends readonly any[]> = Interface<S[number]> extends S[number] ? [Extract<keyof S[number], ReadonlyKey<T>>] extends [never] ? Required<S[number]> extends Pick<T, keyof T & keyof S[number]> ? Interface<T> extends T ? S : [Exclude<keyof S[number], keyof Interface<T>>] extends [never] ? S : "Sources can only contain public properties of a target with private properties"[] : "Values of sources do not extends values of target"[] : "Sources cannot overwrite readonly properties of target"[] : "Sources cannot have private properties"[];
 export type AssignableTo<T> = Partial<T> & object;
 export type AssertTuple<T> = T extends infer U extends readonly any[] ? U : never;
 export type AssertString<T> = T extends infer U extends string ? U : never;

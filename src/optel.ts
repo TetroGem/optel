@@ -1,7 +1,7 @@
 import { OptelFromEntries } from './fromEntries';
 import { OptelOmit } from './omit';
 import { OptelPick, OptelUnknownKey } from './pick';
-import { AssertAssignableTo, AssignAll, AssignableTo, DefinedAssignAll, DefinedValuesOnly, KeyOf } from './types';
+import { AssertAssignableTo, AssertDefinedAssignableTo, AssignAll, AssignableTo, DefinedAssignAll, DefinedValuesOnly, KeyOf } from './types';
 
 export function entries<const O extends object>(object: O): [string, unknown][] {
     return Object.entries(object);
@@ -13,13 +13,13 @@ function removeUndefinedValues<O extends object>(object: O): DefinedValuesOnly<O
 
 export function assignDefined<T extends object, S extends readonly AssignableTo<T>[]>(
     target: T,
-    ...sources: AssertAssignableTo<T, S>
+    ...sources: AssertDefinedAssignableTo<T, S>
 ): asserts target is DefinedAssignAll<T, S> {
     return Object.assign(target, ...sources.map(source => removeUndefinedValues(source as object)));
 }
 
 export function mergeDefined<const S extends readonly object[]>(
-    ...sources: AssertAssignableTo<{}, S>
+    ...sources: AssertDefinedAssignableTo<{}, S>
 ): DefinedAssignAll<{}, S> {
     return Object.assign({}, ...sources.map(source => removeUndefinedValues(source as object)));
 }

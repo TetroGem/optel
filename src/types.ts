@@ -61,6 +61,19 @@ export type AssertAssignableTo<T, S extends readonly any[]> =
         : "Sources cannot have private properties"[]
         ;
 
+export type AssertDefinedAssignableTo<T, S extends readonly any[]> =
+    Interface<S[number]> extends S[number]
+        ? [Extract<keyof S[number], ReadonlyKey<T>>] extends [never]
+            ? Required<S[number]> extends Pick<T, keyof T & keyof S[number]>
+                ? Interface<T> extends T
+                    ? S
+                    : [Exclude<keyof S[number], keyof Interface<T>>] extends [never]
+                        ? S
+                        : "Sources can only contain public properties of a target with private properties"[]
+                : "Values of sources do not extends values of target"[]
+            : "Sources cannot overwrite readonly properties of target"[]
+        : "Sources cannot have private properties"[]
+        ;
 
 export type AssignableTo<T> = Partial<T> & object;
 
