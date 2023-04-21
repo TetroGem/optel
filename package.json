@@ -1,6 +1,6 @@
 {
   "name": "optel",
-  "version": "0.5.2",
+  "version": "0.5.3",
   "description": "TypeScript library for type-safe assigning and merging objects",
   "main": "./dist/index.js",
   "exports": "./src/index.js",
