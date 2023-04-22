@@ -1,4 +1,4 @@
-import { Pipe, Objects, Tuples, Fn } from "hotscript";
+import { Pipe, Objects, Tuples, Fn, Unions } from "hotscript";
 import { HOTIsUnion, HOTUnionToTuple, HOTEntriesFromKeys, HOTIsNotUnion } from "./hots";
 import { Prettify } from "./types";
 
@@ -12,6 +12,7 @@ interface HOTPickFilteredKeys<O, F extends Fn> extends Fn {
             Tuples.Filter<F>,
             // Convert to a union of keys and back to a tuple to flatten into a one key per index tuple
             Tuples.ToUnion,
+            Unions.Extract<keyof O>,
             HOTUnionToTuple,
             // Map tuple of keys to tuple of entries
             Tuples.Map<HOTEntriesFromKeys<O>>,

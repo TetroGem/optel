@@ -24,5 +24,6 @@
         "outDir": "./dist",
         "declaration": true,
         "allowSyntheticDefaultImports": true,
+        "exactOptionalPropertyTypes": true,
     },
 }

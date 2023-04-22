@@ -1,6 +1,7 @@
 import { B, Fn, Objects, Pipe, Tuples, _ } from "hotscript";
 import { HOTAssign, HOTDefinedAssign, HOTUnionToTuple } from "./hots";
 import { UnionToTuple } from "hotscript/dist/internals/helpers";
+import { OptelUnknownKey } from "./pick";
 export type Interface<T> = {
     [K in keyof T]: T[K];
 };
@@ -67,6 +68,7 @@ export type KeyOf<T, V> = keyof Pipe<T, [
     Tuples.ToUnion,
     Objects.FromEntries
 ]>;
+export type OptelKeyOf<O, V> = Tuplify<KeyOf<O, V> | OptelUnknownKey | ([KeyOf<O, V>] extends [never] ? undefined : KeyOf<O, V>) | ([RequiredKey<Pick<O, KeyOf<O, V> & keyof O>>] extends [never] ? undefined : never)>[number];
 export type IsUnion<T> = UnionToTuple<T> extends [any] ? false : true;
 export type Not<T> = T extends true ? false : true;
 type UnionToIntersection<U> = (U extends any ? (k: U) => void : never) extends ((k: infer I) => void) ? I : never;
@@ -83,4 +85,7 @@ export type DefinedValuesOnly<O extends object> = Prettify<Pipe<O, [
     Tuples.ToUnion,
     Objects.FromEntries
 ]>>;
+export type OptelUnlocked<O> = Prettify<O & {
+    [P: PropertyKey]: unknown;
+}>;
 export {};
