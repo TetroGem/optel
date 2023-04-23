@@ -171,7 +171,7 @@ export function unlock<const O>(object: O): OptelUnlocked<O> {
  * @param sources The entries to create an object from
  * @returns The created object
  */
-export function fromEntries<const O extends readonly (readonly [key: any, value: any])[]>(...entries: O): OptelFromEntries<O> {
+export function fromEntries<const T extends readonly (readonly [key: any, value: any])[]>(...entries: T): OptelFromEntries<T> {
     return Object.fromEntries(entries);
 }
 
